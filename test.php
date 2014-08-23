@@ -42,13 +42,29 @@ font-weight: bold;
 			'#my_element' => array(
 				'h1' => array(),
 				'ul.test' => array(
-					'.list-item' => array(
-						'&:last-child' => array()
-					)
+					'.list-item' => array(),
+					'.list-item:last-child' => array()
 				)
 			)
 		)
 	);
+
+	/*
+		Version 2.0 for this
+	*/
+	//  $expect->equal(
+	// 	$converter->getSelectors($testData),
+	// 	array(
+	// 		'#my_element' => array(
+	// 			'h1' => array(),
+	// 			'ul.test' => array(
+	// 				'.list-item' => array(
+	// 					'&:last-child' => array()
+	// 				)
+	// 			)
+	// 		)
+	// 	)
+	// );
 
 	$expect->equal(
 		$converter->convert($testData),

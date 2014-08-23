@@ -14,7 +14,7 @@ class CssToSassConverter {
 	private function getNtabs($n) {
 		$tabs = '';
 		for ($i = $n; $i > 0; $i--) {
-			$tabs = $tabs . "   ";
+			$tabs = $tabs . "    ";
 		}
 		return $tabs;
 	}
@@ -24,9 +24,11 @@ class CssToSassConverter {
 		foreach($selectors as $selector => $children) {
 			$selectorString = $originalSelectorString . ' ' . $selector;
 			
-			$SASS = $SASS . "\n\n" . $this->getNtabs($level) . $selector . " { \n";
+			$SASS = $SASS . "\n\n" . $this->getNtabs($level) . $selector . " {\n";
 			$css = $this->getCssForThisSelector($statementBlocks, $selectorString);
-			$css = $this->getNtabs($level + 1) . str_replace("\n", "\n" . $this->getNtabs($level + 1), $css);
+			if (strlen($css) > 0) {
+				$css = $this->getNtabs($level + 1) . str_replace("\n", "\n" . $this->getNtabs($level + 1), $css);
+			}
 			$SASS = $SASS . $css;
 
 			if (count($children) > 0) {

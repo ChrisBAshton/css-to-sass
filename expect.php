@@ -3,6 +3,7 @@
 class Expect {
 
 	public function equal ($actual, $expected) {
+
 		if ($actual !== $expected) {
 			echo "\n\t Actual \n\n";
 			var_dump($actual);
