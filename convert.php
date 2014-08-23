@@ -21,8 +21,6 @@ class CssToSassConverter {
 
 	private function buildSass($selectors, $statementBlocks, $SASS = '', $originalSelectorString = '', $level = 0) {
 		
-
-		
 		foreach($selectors as $selector => $children) {
 			$selectorString = $originalSelectorString . ' ' . $selector;
 			
@@ -50,9 +48,13 @@ class CssToSassConverter {
 		foreach($statementBlocks as $block) {
 			preg_match_all('/\s*' . $selectorString . '\s*{([^}]*)/im', $block, $tmp);
 
-			echo "\n preg match all func: '/\s*" . $selectorString . "\s*{([^}]*)/im'";
-
-			$css = $css . trim($tmp[1][0]);
+			if (count($tmp[1]) > 0) {
+				// mutliple blocks applying to the same selector, need to separate them
+				if ($css !== '') {
+					$css = $css . "\n";
+				}
+				$css = $css . trim($tmp[1][0]);	
+			}
 		}
 
 		return $css;
