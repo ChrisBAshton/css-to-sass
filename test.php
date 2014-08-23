@@ -42,8 +42,9 @@ font-weight: bold;
 			'#my_element' => array(
 				'h1' => array(),
 				'ul.test' => array(
-					'.list-item' => array(),
-					'.list-item:last-child' => array()
+					'.list-item' => array(
+						'&:last-child' => array()
+					)
 				)
 			)
 		)

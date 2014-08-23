@@ -113,6 +113,33 @@ class CssToSassConverter {
 			$tmpArray = &$nestedArray;
 
 			foreach ($selectorChunks as $chunk) {
+
+				// if chunk contains ':' character
+					// if parent selector exists at this level
+						// rename this to &:... and make it a child of that
+					// else
+						// assume we only ever want to target the : modifier, so just make it its own array
+
+				// @TODO - we should reorder selectors before passing to this function, so that
+				// top level selectors come first (i.e. h1, p, etc) and nested selectors come lower,
+				// with modifier (':') selectors coming last.
+				// otherwise the above pseudocode will not work - you could have a block
+				// .something:last-child
+				// followed by a block
+				// .something
+				// and it would be too late - the compiler will have assumed that :last-child was the only
+				// modifier of .something we want to target.
+				// would be pointless for the compiler to output:
+				/*
+					.something {
+						
+						&:last-child {
+							// something
+						}
+
+					}
+				*/
+
 				if (!$tmpArray[$chunk]) {
 					$tmpArray[$chunk] = array();
 				}
