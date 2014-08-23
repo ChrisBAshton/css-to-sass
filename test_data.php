@@ -15,12 +15,12 @@ $testData = "
     background: black;
 }
 
-#my_element ul.test .list-item a {
+#my_element ul.test .list-item {
     text-decoration: none;
     color: #737373;
 }
 
-#my_element ul.test .list-item:last-child a {
+#my_element ul.test .list-item:last-child {
     font-weight: bold;
 }
 ";
@@ -38,9 +38,10 @@ $expectedOutput = "
         color: white;
         background: black;
 
-        .list-item a {
+        .list-item {
 
             text-decoration: none;
+            color: #737373;
 
             &:last-child {
                 font-weight: bold;

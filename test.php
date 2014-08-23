@@ -4,37 +4,34 @@ include 'convert.php';
 include 'test_data.php';
 include 'expect.php';
 
-$converter = new CssToSassConverter();
-$converted = $converter->convert($testData);
-
 try {
 
+	$converter = new CssToSassConverter();
 	$expect = new Expect();
 
 	$expect->equal(
 		$converter->getStatementBlocks($testData),
 		array(
-
 '#my_element h1 {
-    font-weight: bold;
+font-weight: bold;
 }',
 
 '#my_element ul.test {
-    list-style-type: none
+list-style-type: none
 }',
 
 '#my_element ul.test {
-    color: white;
-    background: black;
+color: white;
+background: black;
 }',
 
-'#my_element ul.test .list-item a {
-    text-decoration: none;
-    color: #737373;
+'#my_element ul.test .list-item {
+text-decoration: none;
+color: #737373;
 }',
 
-'#my_element ul.test .list-item:last-child a {
-    font-weight: bold;
+'#my_element ul.test .list-item:last-child {
+font-weight: bold;
 }'
 		)
 	);
@@ -45,21 +42,17 @@ try {
 			'#my_element' => array(
 				'h1' => array(),
 				'ul.test' => array(
-					'.list-item' => array(
-						'a' => array()
-					),
-					'.list-item:last-child' => array(
-						'a' => array()
-					)
+					'.list-item' => array(),
+					'.list-item:last-child' => array()
 				)
 			)
 		)
 	);
 
-	// $expect->equal(
-	// 	$converted,
-	// 	$expectedOutput
-	// );
+	$expect->equal(
+		$converter->convert($testData),
+		$expectedOutput
+	);
 
 	echo "\nAll tests passed. \n";
 
