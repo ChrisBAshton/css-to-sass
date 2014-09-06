@@ -1,8 +1,6 @@
-<?php
-
-include 'convert.php';
-include 'test_data.php';
-include 'expect.php';
+import convert
+import test_data
+import expect
 
 try {
 
@@ -71,7 +69,7 @@ font-weight: bold;
 		$expectedOutput
 	);
 
-	echo "\nAll tests passed. \n";
+	print "\nAll tests passed. \n";
 
 } catch (Exception $e) {
 	echo $e->getMessage() . "\n\n";
