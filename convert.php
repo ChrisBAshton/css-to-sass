@@ -2,23 +2,18 @@
 
 class CssToSassConverter {
 
+    /* The main function to convert */
 	public function convert ($css) {
+		//array of selectors (representing levels?)
 		$selectors = $this->getSelectors($css);
+		//var_dump($selectors);
 		$statementBlocks = $this->getStatementBlocks($css);
-
+		//print_r($statementBlocks);
 		$SASS = $this->buildSass($selectors, $statementBlocks);
 
-		return $SASS;
+		//return $SASS;
 	}
-
-	private function getNtabs($n) {
-		$tabs = '';
-		for ($i = $n; $i > 0; $i--) {
-			$tabs = $tabs . "    ";
-		}
-		return $tabs;
-	}
-
+	/* level 1 */
 	private function buildSass($selectors, $statementBlocks, $SASS = '', $originalSelectorString = '', $level = 0) {
 		
 		foreach($selectors as $selector => $children) {
@@ -42,26 +37,22 @@ class CssToSassConverter {
 		return $SASS;
 	}
 
-	private function getCssForThisSelector($statementBlocks, $selectorString) {
+	/* Level 2 functions */
+	public function getSelectors ($css) {
+		preg_match_all('/([0-9a-zA-Z#: \.\-_]+){[^}]*/im', $css, $selectors);
+		$selectors = $selectors[1];
 
-		$selectorString = trim($selectorString);
-		$css = "";
-
-		foreach($statementBlocks as $block) {
-			preg_match_all('/\s*' . $selectorString . '\s*{([^}]*)/im', $block, $tmp);
-
-			if (count($tmp[1]) > 0) {
-				// mutliple blocks applying to the same selector, need to separate them
-				if ($css !== '') {
-					$css = $css . "\n";
-				}
-				$css = $css . trim($tmp[1][0]);	
-			}
+		// remove whitespace from the ends
+		for($i = 0; $i < count($selectors); $i++) {
+			$selectors[$i] = trim($selectors[$i]);
 		}
 
-		return $css;
-	}
+		$selectorsToReturn = $this->convertSelectorsToNestedArray($selectors);
 
+		//print_r($selectorsToReturn) and die();
+
+		return $selectorsToReturn;
+	}
 	public function getStatementBlocks ($css) {
 		preg_match_all('/([0-9a-zA-Z#: \.\-_]+{([^}]*))/im', $css, $statementBlocks);
 		for ($i = 0; $i < count($statementBlocks[0]); $i++) {
@@ -75,20 +66,7 @@ class CssToSassConverter {
 		return $statementBlocks;
 	}
 
-	public function getSelectors ($css) {
-		preg_match_all('/([0-9a-zA-Z#: \.\-_]+){[^}]*/im', $css, $selectors);
-		$selectors = $selectors[1];
-
-		// remove whitespace from the ends
-		for($i = 0; $i < count($selectors); $i++) {
-			$selectors[$i] = trim($selectors[$i]);
-		}
-
-		$selectorsToReturn = $this->convertSelectorsToNestedArray($selectors);
-
-		return $selectorsToReturn;
-	}
-
+	/* Level 3 */
 	/*
 	Convert
 		array(
@@ -151,5 +129,35 @@ class CssToSassConverter {
 		}
 
 		return $nestedArray;
+	}
+
+	//HELPER
+	private function getCssForThisSelector($statementBlocks, $selectorString) {
+
+		$selectorString = trim($selectorString);
+		$css = "";
+
+		foreach($statementBlocks as $block) {
+			preg_match_all('/\s*' . $selectorString . '\s*{([^}]*)/im', $block, $tmp);
+
+			if (count($tmp[1]) > 0) {
+				// mutliple blocks applying to the same selector, need to separate them
+				if ($css !== '') {
+					$css = $css . "\n";
+				}
+				$css = $css . trim($tmp[1][0]);	
+			}
+		}
+
+		return $css;
+	}
+	
+	//HELPER
+	private function getNtabs($n) {
+		$tabs = '';
+		for ($i = $n; $i > 0; $i--) {
+			$tabs = $tabs . "    ";
+		}
+		return $tabs;
 	}
 }
